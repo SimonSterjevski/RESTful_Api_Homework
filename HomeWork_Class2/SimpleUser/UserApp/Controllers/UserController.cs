@@ -33,12 +33,16 @@ namespace UserApp.Controllers
         {
             try
             {
-                User user = StaticDb.Users.FirstOrDefault(x => x.Id == id);
-                if (user != null)
+                if (id > StaticDb.Users.Count())
                 {
-                    return StatusCode(StatusCodes.Status200OK, user);
+                    return StatusCode(StatusCodes.Status404NotFound, "No such user!");
                 }
-                return StatusCode(StatusCodes.Status400BadRequest, "User doesn't exist");
+                User user = StaticDb.Users.FirstOrDefault(x => x.Id == id);
+                if (user == null)
+                {
+                    return StatusCode(StatusCodes.Status400BadRequest, "User doesn't exist");
+                }
+                return StatusCode(StatusCodes.Status200OK, user);
             }
             catch
             {
