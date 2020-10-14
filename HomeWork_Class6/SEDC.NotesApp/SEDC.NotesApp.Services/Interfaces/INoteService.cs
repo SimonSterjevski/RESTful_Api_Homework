@@ -12,5 +12,6 @@ namespace SEDC.NotesApp.Services.Interfaces
         void AddNote(NoteModel noteModel);
         void UpdateNote(NoteModel noteModel);
         void DeleteNote(int id);
+        string GetMostUsedTag();
     }
 }

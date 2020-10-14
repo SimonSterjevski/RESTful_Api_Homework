@@ -124,17 +124,17 @@ namespace SEDC.NotesApp.Controllers
             }
         }
 
-        [HttpGet("mostusedtag")]
-        public ActionResult<string> GetMostUsedTag()
-        {
-            try
-            {
-                return StatusCode(StatusCodes.Status200OK, _userService.GetMostUsedTag());
-            }
-            catch
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Something went wrong!");
-            }
-        }
+        //[HttpGet("mostusedtag")]
+        //public ActionResult<string> GetMostUsedTag()
+        //{
+        //    try
+        //    {
+        //        return StatusCode(StatusCodes.Status200OK, _userService.GetMostUsedTag());
+        //    }
+        //    catch
+        //    {
+        //        return StatusCode(StatusCodes.Status500InternalServerError, "Something went wrong!");
+        //    }
+        //}
     }
 }

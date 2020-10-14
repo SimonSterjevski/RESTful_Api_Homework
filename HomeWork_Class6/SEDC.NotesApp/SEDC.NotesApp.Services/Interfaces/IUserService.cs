@@ -15,6 +15,6 @@ namespace SEDC.NotesApp.Services.Interfaces
         void AddUser(UserModel userModel);
         void DeleteUser(int id);
         void UpdateUser(UserModel userModel);
-        string GetMostUsedTag();
+        //string GetMostUsedTag();
     }
 }

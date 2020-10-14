@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using SEDC.NotesApp.DataAccess;
 using SEDC.NotesApp.Domain.Models;
@@ -12,13 +13,14 @@ namespace SEDC.NotesApp.Services.Implementations
 {
     public class NoteService : INoteService
     {
-        private IRepository<Note> _noteRepository;
+        private INoteRepository _noteRepository;
         private IRepository<User> _userRepository;
-
-        public NoteService(IRepository<Note> noteRepository, IRepository<User> userRepository)
+        private IRepository<Tag> _tagRepository;
+        public NoteService(INoteRepository noteRepository, IRepository<User> userRepository, IRepository<Tag> tagRepository)
         {
             _noteRepository = noteRepository;
             _userRepository = userRepository;
+            _tagRepository = tagRepository;
         }
 
         public List<NoteModel> GetAllNotes()
@@ -49,9 +51,10 @@ namespace SEDC.NotesApp.Services.Implementations
         public void AddNote(NoteModel noteModel)
         {
             User userDb = ValidateNoteModel(noteModel);
-
+            Tag tag = _tagRepository.GetById(noteModel.TagId);
             Note noteForDb = noteModel.ToNote();
             noteForDb.User = userDb;
+            noteForDb.Tag = tag;
             _noteRepository.Add(noteForDb);
         }
 
@@ -63,10 +66,11 @@ namespace SEDC.NotesApp.Services.Implementations
                 throw new NotFoundException(noteModel.Id);
             }
             User userDb = ValidateNoteModel(noteModel);
-
+            Tag tag = _tagRepository.GetById(noteModel.TagId);
             noteDb.Text = noteModel.Text;
             noteDb.Color = noteModel.Color;
-            //noteDb.TagId = noteModel.TagId;
+            noteDb.TagId = noteModel.TagId;
+            noteDb.Tag = tag;
             noteDb.UserId = noteModel.UserId;
             noteDb.User = userDb;
             _noteRepository.Update(noteDb);
@@ -81,6 +85,20 @@ namespace SEDC.NotesApp.Services.Implementations
             }
             _noteRepository.Delete(noteDb);
         }
+
+
+
+        public string GetMostUsedTag()
+        {
+            Tag tag = _noteRepository.FindMostUsedTag();
+            if (tag == null)
+            {
+                throw new Exception("There are no tags yet!");
+            }
+            return tag.Type;
+        }
+
+
 
         private User ValidateNoteModel(NoteModel noteModel)
         {
@@ -106,6 +124,10 @@ namespace SEDC.NotesApp.Services.Implementations
             if (!string.IsNullOrEmpty(noteModel.Color) && noteModel.Color.Length > 30)
             {
                 throw new NoteException("The property Color can not contain more than 30 characters");
+            }
+            if (!_tagRepository.GetAll().Select(x => x.Id).Contains(noteModel.TagId))
+            {
+                throw new NotFoundException($"Tag with id {noteModel.TagId} was not found!");
             }
 
             return userDb;

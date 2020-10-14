@@ -22,14 +22,16 @@ namespace SEDC.NotesApp.Helpers
 
         public static void InjectRepositories(IServiceCollection services)
         {
-            services.AddTransient<IRepository<Note>, NoteRepository>();
+            services.AddTransient<INoteRepository, NoteRepository>();
             services.AddTransient<IRepository<User>, UserRepository>();
+            services.AddTransient<IRepository<Tag>, TagRepository>();
         }
 
         public static void InjectServices(IServiceCollection services)
         {
             services.AddTransient<INoteService, NoteService>();
             services.AddTransient<IUserService, UserService>();
+            //services.AddTransient<ITagService, TagService>();
         }
     }
 }

@@ -65,6 +65,10 @@ namespace SEDC.NotesApp.Controllers
                 //log
                 return StatusCode(StatusCodes.Status400BadRequest, e.Message);
             }
+            catch (NotFoundException e)
+            {
+                return StatusCode(StatusCodes.Status404NotFound, e.Message);
+            }
             catch
             {
                 //log
@@ -110,6 +114,19 @@ namespace SEDC.NotesApp.Controllers
             catch (Exception e)
             {
                 //log
+                return StatusCode(StatusCodes.Status500InternalServerError, "Something went wrong!");
+            }
+        }
+
+        [HttpGet("mostusedtag")]
+        public ActionResult<string> GetMostUsedTag()
+        {
+            try
+            {
+                return StatusCode(StatusCodes.Status200OK, _noteService.GetMostUsedTag());
+            }
+            catch
+            {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Something went wrong!");
             }
         }

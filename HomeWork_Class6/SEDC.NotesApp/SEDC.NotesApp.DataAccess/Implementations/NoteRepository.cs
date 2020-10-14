@@ -5,10 +5,11 @@ using System.Linq;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using SEDC.NotesApp.Domain;
+using System.Security.Cryptography.X509Certificates;
 
 namespace SEDC.NotesApp.DataAccess.Implementations
 {
-    public class NoteRepository :IRepository<Note>
+    public class NoteRepository :INoteRepository
     {
         private NotesAppDbContext _notesAppDbContext;
 
@@ -51,5 +52,12 @@ namespace SEDC.NotesApp.DataAccess.Implementations
             _notesAppDbContext.Notes.Update(entity);
             _notesAppDbContext.SaveChanges();
         }
+
+        public Tag FindMostUsedTag()
+        {
+            List<Tag> tags = _notesAppDbContext.Notes.Select(x => x.Tag).ToList();
+            return tags.FirstOrDefault(x => x.Id == tags.GroupBy(y => y.Id).OrderByDescending(y => y.Count()).FirstOrDefault().Key);
+        }
+
     }
 }

@@ -15,11 +15,12 @@ namespace SEDC.NotesApp.Validation
             {
                 throw new NoteException("The property UserName for user is required");
             }
-            if (userModel.FirstName.Length > 50 || userModel.LastName.Length > 50 || userModel.UserName.Length > 50)
+            if ((!string.IsNullOrEmpty(userModel.FirstName) && userModel.FirstName.Length > 50) || 
+                (!string.IsNullOrEmpty(userModel.LastName) && userModel.LastName.Length > 50) || userModel.UserName.Length > 50)
             {
                 throw new NoteException("The properties FirstName, LastName and UserName can not contain more than 50 characters");
             }
-            if (userModel.Address.Length > 150)
+            if (!string.IsNullOrEmpty(userModel.Address) && userModel.Address.Length > 150)
             {
                 throw new NoteException("The property Address can not contain more than 150 characters");
             }

@@ -79,12 +79,12 @@ namespace SEDC.NotesApp.Services.Implementations
             _userRepository.Update(user);
         }
 
-        public string GetMostUsedTag()
-        {
+        //public string GetMostUsedTag()
+        //{
 
-            var tag = _userRepository.GetAll().SelectMany(x => x.Notes).GroupBy(x => x.Tag.Type).OrderByDescending(x => x.Count()).FirstOrDefault(); 
-            return $"{tag.Key} - {tag.Count()}";
-        }
+        //    var tag = _userRepository.GetAll().SelectMany(x => x.Notes).GroupBy(x => x.Tag.Type).OrderByDescending(x => x.Count()).FirstOrDefault(); 
+        //    return $"{tag.Key} - {tag.Count()}";
+        //}
 
 
     }
